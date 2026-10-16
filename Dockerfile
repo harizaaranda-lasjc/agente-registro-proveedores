@@ -1,7 +1,7 @@
 FROM oven/bun:latest
 WORKDIR /app
 COPY package.json bun.lockb* ./
-BRUN bun install
+RUN bun install
 COPY . .
 EXPOSE 3000
 CMD ["bun", "run", "src/server.ts"]
