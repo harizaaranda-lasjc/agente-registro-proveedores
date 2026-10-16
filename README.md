@@ -17,3 +17,9 @@ Solución desarrollada para el reto técnico de **Periferia IT Group S.A.S. (Equ
    ```bash
    git clone https://github.com/harizaaranda-lasjc/agente-registro-proveedores.git
    cd agente-registro-proveedores
+
+---
+
+## 🌐 Demo / Despliegue en Vivo 
+Puedes probar el agente en vivo en la siguiente URL:
+👉 **https://agente-registro-proveedores-2v1l.onrender.com/**
