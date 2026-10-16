@@ -1,0 +1,16 @@
+# Dependencias instaladas
+node_modules/
+.bun/
+
+# Variables de entorno y claves secretas
+.env
+.env.local
+*.env
+
+# Salidas de ejecución y archivos generados
+out/
+
+# Archivos del sistema operativo y registros de auditoría
+.DS_Store
+Thumbs.db
+*.log

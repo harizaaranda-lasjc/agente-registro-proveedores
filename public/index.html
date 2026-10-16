@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agente de Registro de Proveedores | Periferia IT</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; justify-content: center; }
+    .chat-container { width: 100%; max-width: 800px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 90vh; }
+    .chat-header { background: #003366; color: white; padding: 15px 20px; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+    .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+    .message { max-width: 80%; padding: 12px 16px; border-radius: 8px; line-height: 1.5; white-space: pre-wrap; }
+    .user { align-self: flex-end; background: #007bff; color: white; }
+    .assistant { align-self: flex-start; background: #e9ecef; color: #212529; border: 1px solid #dee2e6; }
+    .chat-input { display: flex; padding: 15px; border-top: 1px solid #dee2e6; gap: 10px; }
+    input[type="text"] { flex: 1; padding: 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+    button { padding: 12px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #218838; }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>🤖 Agente de Registro de Proveedores</h2>
+      <small>Periferia IT Group S.A.S. — Automatización Determinista & LLM</small>
+    </div>
+    <div class="chat-messages" id="messages">
+      <div class="message assistant">¡Hola! Soy tu asistente para el registro de proveedores. Puedes pedirme procesar casos como:
+• <code>Procesa el caso co-industrias-delta</code>
+• <code>Procesa el caso ec-corp-andina</code>
+• <code>Procesa el caso hn-agroexport-sula</code>
+• <code>Procesa el caso pa-logistica-istmo</code></div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí..." onkeypress="if(event.key==='Enter') sendMessage()">
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <script>
+    const sessionId = "sesion-web-" + Math.random().toString(36).substring(7);
+
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendMessage(text, "user");
+      input.value = "";
+
+      const typingDiv = appendMessage("Pensando y ejecutando herramientas...", "assistant");
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId, message: text })
+        });
+        const data = await res.json();
+        typingDiv.innerText = data.respuesta || data.error || "Sin respuesta del servidor.";
+      } catch (err) {
+        typingDiv.innerText = "❌ Error de conexión con el servidor backend.";
+      }
+    }
+
+    function appendMessage(text, sender) {
+      const container = document.getElementById("messages");
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.innerText = text;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+      return div;
+    }
+  </script>
+
+</body>
+</html>
